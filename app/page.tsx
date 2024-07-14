@@ -19,7 +19,8 @@ import config from './config.json';
 export default function App() {
   const dailyDoseVals = config.dailyDoseVals;
   const [dosages, setDosages] = useState([""]); // Start with one month
-  const [targetDosage, setTargetDosage] = useState(0); // Target total dosage
+  const [mass, setMass] = useState(0); // Mass of the subject
+  const [targetDosage, setTargetDosage] = useState([0, 0]); // Target dosage interval
 
   const handleSelectChange = (index: number, value: string) => {
     const newDosages = [...dosages];
@@ -35,6 +36,13 @@ export default function App() {
 
   // Calculate total dosage
   const totalDosages = dosages.reduce((acc, dose) => acc + (Number(dose) * 30 || 0), 0);
+
+  // Update target dosage based on mass
+  const updateTargetDosage = (massValue) => {
+    const minDosage = 120 * massValue;
+    const maxDosage = 150 * massValue;
+    setTargetDosage([minDosage, maxDosage]);
+  };
 
   return (
     <div className="h-screen flex items-center justify-center">
@@ -73,13 +81,17 @@ export default function App() {
             </tbody>
           </table>
 
-          {/* Input for target total dosage */}
+          {/* Input for subject's mass */}
           <div className="flex justify-center mt-4 items-center">
-            <label className="mr-2">Target Total Dosage:</label>
+            <label className="mr-2">Enter Mass (kg):</label>
             <input
               type="number"
-              value={targetDosage}
-              onChange={(e) => setTargetDosage(Number(e.target.value))}
+              value={mass}
+              onChange={(e) => {
+                const massValue = Number(e.target.value);
+                setMass(massValue);
+                updateTargetDosage(massValue);
+              }}
               className="border border-gray-300 rounded-md p-2 w-[200px] text-center"
             />
           </div>
@@ -93,11 +105,11 @@ export default function App() {
               </div>
               <div className="flex justify-between">
                 <span>Target Total Dosage:</span>
-                <span>{targetDosage}</span>
+                <span>{targetDosage[0]} - {targetDosage[1]}</span>
               </div>
               <div className="flex justify-between">
                 <span className="font-bold">Total Dosage Left:</span>
-                <span>{targetDosage - totalDosages}</span>
+                <span>{targetDosage[0] - totalDosages} - {targetDosage[1] - totalDosages}</span>
               </div>
             </div>
           </div>
