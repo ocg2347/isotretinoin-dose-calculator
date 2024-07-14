@@ -76,10 +76,12 @@ export default function App() {
         </DropdownMenu>
       </div>
       
-      <Card>
+      <Card className="max-w-sm w-full mx-4 my-4">
 
         <CardHeader>
-          <CardTitle>Isotretinoin Dosage Calculator 💊</CardTitle>
+        <CardTitle className="flex items-center overflow-hidden text-ellipsis whitespace-nowrap text-xl p-1">
+          Isotretinoin Dosage Calculator <span className="ml-1">💊</span>
+        </CardTitle>
         </CardHeader>
 
         <CardContent>
@@ -87,7 +89,7 @@ export default function App() {
             <thead>
               <tr>
                 <th className="text-left">Month</th>
-                <th className="text-left">Select Dose</th>
+                <th className="text-left">Daily Dosage</th>
               </tr>
             </thead>
             <tbody>
@@ -120,7 +122,7 @@ export default function App() {
               type="number"
               value={mass}
               onChange={(e) => {
-                const massValue = Number(e.target.value);
+                const massValue = e.target.value === "" ? "" : Number(e.target.value);
                 setMass(massValue);
                 updateTargetDosage(massValue);
               }}
@@ -129,23 +131,25 @@ export default function App() {
           </div>
           
           {/* Summary  */}
-          <div className="flex justify-center mt-4">
-            <div className="border border-gray-300 rounded-md p-4 w-[300px]">
-              <p className="text-lg font-semibold">Summary</p>
-              <div className="flex justify-between">
-                <span>Total Used:</span>
-                <span>{totalDosages}</span>
-              </div>
-              <div className="flex justify-between">
-                <span>Target Total Dosage:</span>
-                <span>{targetDosage[0]} - {targetDosage[1]}</span>
-              </div>
-              <div className="flex justify-between">
-                <span className="font-bold">Total Dosage Left:</span>
-                <span>{targetDosage[0] - totalDosages} - {targetDosage[1] - totalDosages}</span>
-              </div>
-            </div>
+          <div className="border border-gray-300 rounded-md mt-4 p-4">
+            <p className="text-lg font-semibold">Summary</p>
+            <div className="flex justify-between">
+            
+            <span className="whitespace-nowrap">Total Used:</span>
+            <span className="whitespace-nowrap">{totalDosages} mg</span>
           </div>
+    
+          <div className="flex justify-between">
+            
+        <span className="whitespace-nowrap">Total Dosage Target:</span>
+        <span className="whitespace-nowrap">{targetDosage[0]} - {targetDosage[1]} mg</span>
+      </div>
+
+      <div className="flex justify-between">
+        <span className="font-bold whitespace-nowrap">Total Dosage Left:</span>
+        <span className="whitespace-nowrap">{targetDosage[0] - totalDosages} - {targetDosage[1] - totalDosages} mg</span>
+        </div>
+        </div>
 
         </CardContent>
 
