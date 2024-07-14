@@ -14,16 +14,17 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import config from './config.json';
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Moon, Sun } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useTheme } from "next-themes";
+import { Input } from "@/components/ui/input"
+import { Moon, Sun } from "lucide-react";
+import config from './config.json';
 
 export default function App() {
   const dailyDoseVals = config.dailyDoseVals;
@@ -96,7 +97,7 @@ export default function App() {
                   <td className="py-2">
                     <Select onValueChange={(value) => handleSelectChange(index, value)}>
                       <SelectTrigger className="w-flex">
-                        <SelectValue placeholder={`Select daily dose for month ${index + 1}`} />
+                        <SelectValue placeholder={`Daily dose for month ${index + 1}`} />
                       </SelectTrigger>
                       <SelectContent>
                         {dailyDoseVals.map((x) => (
@@ -113,9 +114,8 @@ export default function App() {
           </table>
 
           <div className="flex justify-center mt-4 items-center">
-            <label className="mr-2">Enter Mass (kg):</label>
-            <input
-              type="number"
+            <label className="mr-2 whitespace-nowrap">Mass (kg):</label>
+            <Input type="number" className="rounded-md p-2 w-half-sa text-center"
               value={mass === 0 ? "" : mass}
               onChange={(e) => {
                 const massValue = e.target.value === "" ? 0 : Number(e.target.value);
@@ -123,12 +123,11 @@ export default function App() {
                 updateTargetDosage(massValue);
               }}
               onKeyDown={handleMassKeyDown} // Handle Enter key
-              className="border border-gray-300 rounded-md p-2 w-[200px] text-center"
             />
           </div>
 
           {/* Summary section rendering conditionally based on mass */}
-          <div className="border border-gray-300 rounded-md mt-4 p-4">
+          <div className="border border-purple-600 rounded-md mt-4 p-4">
             <p className="text-lg font-semibold">Summary</p>
             <div className="flex justify-between">
               <span className="whitespace-nowrap">Total Used:</span>
@@ -149,6 +148,7 @@ export default function App() {
               )}
             </div>
           </div>
+
         </CardContent>
       </Card>
     </div>
