@@ -20,45 +20,43 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
-import { Moon, Sun } from "lucide-react"
-import { Button } from "@/components/ui/button"
-import { useTheme } from "next-themes"
-
+} from "@/components/ui/dropdown-menu";
+import { Moon, Sun } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { useTheme } from "next-themes";
 
 export default function App() {
   const dailyDoseVals = config.dailyDoseVals;
-  const [dosages, setDosages] = useState([""]); // Start with one month
-  const [mass, setMass] = useState(0); // Mass of the subject
-  const [targetDosage, setTargetDosage] = useState([0, 0]); // Target dosage interval
+  const [dosages, setDosages] = useState([""]);
+  const [mass, setMass] = useState(0);
+  const [targetDosage, setTargetDosage] = useState([0, 0]);
   const { setTheme } = useTheme();
 
   const handleSelectChange = (index: number, value: string) => {
     const newDosages = [...dosages];
-    newDosages[index] = value; // Update the selected dosage
-    // Add a new month row if the user selects a dose
+    newDosages[index] = value;
     if (value && index === dosages.length - 1) {
-      newDosages.push(""); // Add new empty month
+      newDosages.push("");
     }
     setDosages(newDosages);
   };
 
-  // Calculate total dosage
   const totalDosages = dosages.reduce((acc, dose) => acc + (Number(dose) * 30 || 0), 0);
 
-  // Update target dosage based on mass
   const updateTargetDosage = (massValue: number) => {
     const minDosage = 120 * massValue;
     const maxDosage = 150 * massValue;
     setTargetDosage([minDosage, maxDosage]);
   };
 
+  const handleMassKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      e.currentTarget.blur(); // Close the keyboard
+    }
+  };
+
   return (
-    <>
-    
     <div className="h-screen flex flex-col items-center justify-center relative">
-      
-      {/* Theme picker in the top right corner */}
       <div className="absolute top-4 right-4">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
@@ -75,13 +73,12 @@ export default function App() {
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
-      
-      <Card className="max-w-sm w-full mx-4 my-4">
 
+      <Card className="max-w-sm w-full mx-4 my-4">
         <CardHeader>
-        <CardTitle className="flex items-center overflow-hidden text-ellipsis whitespace-nowrap text-xl p-1">
-          Isotretinoin Dosage Calculator <span className="ml-1">💊</span>
-        </CardTitle>
+          <CardTitle className="flex items-center overflow-hidden text-ellipsis whitespace-nowrap text-xl p-1">
+            Isotretinoin Dosage Calculator <span className="ml-1">💊</span>
+          </CardTitle>
         </CardHeader>
 
         <CardContent>
@@ -115,46 +112,45 @@ export default function App() {
             </tbody>
           </table>
 
-          {/* Input for subject's mass */}
           <div className="flex justify-center mt-4 items-center">
             <label className="mr-2">Enter Mass (kg):</label>
             <input
               type="number"
-              value={mass}
+              value={mass === 0 ? "" : mass}
               onChange={(e) => {
-                const massValue = e.target.value === "" ? "" : Number(e.target.value);
+                const massValue = e.target.value === "" ? 0 : Number(e.target.value);
                 setMass(massValue);
                 updateTargetDosage(massValue);
               }}
+              onKeyDown={handleMassKeyDown} // Handle Enter key
               className="border border-gray-300 rounded-md p-2 w-[200px] text-center"
             />
           </div>
-          
-          {/* Summary  */}
+
+          {/* Summary section rendering conditionally based on mass */}
           <div className="border border-gray-300 rounded-md mt-4 p-4">
             <p className="text-lg font-semibold">Summary</p>
             <div className="flex justify-between">
-            
-            <span className="whitespace-nowrap">Total Used:</span>
-            <span className="whitespace-nowrap">{totalDosages} mg</span>
+              <span className="whitespace-nowrap">Total Used:</span>
+              <span className="whitespace-nowrap">{totalDosages} mg</span>
+            </div>
+
+            <div className="flex justify-between">
+              <span className="whitespace-nowrap">Total Dosage Target:</span>
+              {mass > 0 && (
+                <span className="whitespace-nowrap">{targetDosage[0]} - {targetDosage[1]} mg</span>
+              )}
+            </div>
+
+            <div className="flex justify-between">
+              <span className="font-bold whitespace-nowrap">Total Dosage Left:</span>
+              {mass > 0 && (
+                <span className="whitespace-nowrap">{targetDosage[0] - totalDosages} - {targetDosage[1] - totalDosages} mg</span>
+              )}
+            </div>
           </div>
-    
-          <div className="flex justify-between">
-            
-        <span className="whitespace-nowrap">Total Dosage Target:</span>
-        <span className="whitespace-nowrap">{targetDosage[0]} - {targetDosage[1]} mg</span>
-      </div>
-
-      <div className="flex justify-between">
-        <span className="font-bold whitespace-nowrap">Total Dosage Left:</span>
-        <span className="whitespace-nowrap">{targetDosage[0] - totalDosages} - {targetDosage[1] - totalDosages} mg</span>
-        </div>
-        </div>
-
         </CardContent>
-
       </Card>
     </div>
-    </>
   );
 }
