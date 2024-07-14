@@ -15,22 +15,31 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import config from './config.json';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { Moon, Sun } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { useTheme } from "next-themes"
+
 
 export default function App() {
   const dailyDoseVals = config.dailyDoseVals;
   const [dosages, setDosages] = useState([""]); // Start with one month
   const [mass, setMass] = useState(0); // Mass of the subject
   const [targetDosage, setTargetDosage] = useState([0, 0]); // Target dosage interval
+  const { setTheme } = useTheme();
 
   const handleSelectChange = (index: number, value: string) => {
     const newDosages = [...dosages];
     newDosages[index] = value; // Update the selected dosage
-
     // Add a new month row if the user selects a dose
     if (value && index === dosages.length - 1) {
       newDosages.push(""); // Add new empty month
     }
-
     setDosages(newDosages);
   };
 
@@ -38,18 +47,41 @@ export default function App() {
   const totalDosages = dosages.reduce((acc, dose) => acc + (Number(dose) * 30 || 0), 0);
 
   // Update target dosage based on mass
-  const updateTargetDosage = (massValue) => {
+  const updateTargetDosage = (massValue: number) => {
     const minDosage = 120 * massValue;
     const maxDosage = 150 * massValue;
     setTargetDosage([minDosage, maxDosage]);
   };
 
   return (
-    <div className="h-screen flex items-center justify-center">
+    <>
+    
+    <div className="h-screen flex flex-col items-center justify-center relative">
+      
+      {/* Theme picker in the top right corner */}
+      <div className="absolute top-4 right-4">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="icon">
+              <Sun className="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+              <Moon className="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+              <span className="sr-only">Toggle theme</span>
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem onClick={() => setTheme("light")}>Light</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("dark")}>Dark</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => setTheme("system")}>System</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+      
       <Card>
+
         <CardHeader>
-          <CardTitle>Isotretinoin Dosage Calculator</CardTitle>
+          <CardTitle>Isotretinoin Dosage Calculator 💊</CardTitle>
         </CardHeader>
+
         <CardContent>
           <table className="w-full text-center">
             <thead>
@@ -95,7 +127,8 @@ export default function App() {
               className="border border-gray-300 rounded-md p-2 w-[200px] text-center"
             />
           </div>
-
+          
+          {/* Summary  */}
           <div className="flex justify-center mt-4">
             <div className="border border-gray-300 rounded-md p-4 w-[300px]">
               <p className="text-lg font-semibold">Summary</p>
@@ -113,8 +146,11 @@ export default function App() {
               </div>
             </div>
           </div>
+
         </CardContent>
+
       </Card>
     </div>
+    </>
   );
 }
