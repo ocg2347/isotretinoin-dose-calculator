@@ -1,36 +1,27 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+## 🔬 Isotretinoin Dose Calculator
+A simple calculator to speed the things up for dermotologists for isotretinoin treatment.
 
-## Getting Started
+## 🤗 Who is this app for? 
+Dermotologists who have little time or are too lazy to do math :)
 
-First, run the development server:
+## 🧮 Method
+The user of the app enters daily doses for each previous month of the treatment. First the total intake so far is calculated with:
+$$ \text{Total Used (mg)} = \sum_{i}^{n_{months}}30(day)\times\text{Daily Dose for Month $i$ (mg/day)} .$$ 
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+She, then enters mass of the patient and the targeted total dose of the whole treatment in per kg basis:
+$$ \text{Total Target Dose (mg)} = \text{Mass (kg)} \times \text{Target Dose per Kg (mg/kg)} . $$ 
+The app calculates how much additional isotretinoin should be intaken to reach the target total dose:
+$$ \text{Total Dose Left (mg)} = \text{Total Target Dose (mg)} -\text{Total Used (mg)} . $$ 
+Lastly, it outputs a naive estimation for the duration of the rest of the treatment based on the Total Dose Left and average daily dose in the treatment to that time:
+$$ \text{Estimated Duration (months)} = \frac{\text{Total Dose Left (mg)}}{\text{Avarage Daily Dose (mg/day)} \times \text{30day/month} } ,$$
+where
+$$ \text{Avarage Daily Dose (mg/day)} =\frac{\sum_{i}^{n_{months}}\text{Daily Dose for Month $i$ (mg/day)}}{n_{months}} . $$
+
+## To Run
+```
+pnpm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+One-click deploy to vercel:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Focg2347%2Fisotretinoin-dose-calculator%2Ftree%2Fmain)
