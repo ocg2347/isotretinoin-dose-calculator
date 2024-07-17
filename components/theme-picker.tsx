@@ -28,7 +28,6 @@ const ThemePicker = () => {
   };
 
   return (
-    <div className="fixed top-4 right-4 z-50">
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Button variant="outline" size="icon">
@@ -58,7 +57,6 @@ const ThemePicker = () => {
           </DropdownMenuItem>
         </DropdownMenuContent>
       </DropdownMenu>
-    </div>
   );
 };
 

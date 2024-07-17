@@ -56,7 +56,6 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center py-4">
-
       <Card className="max-w-sm w-full mx-4 my-4 overflow-auto" >
         <CardHeader>
           <CardTitle className="flex items-center overflow-hidden text-ellipsis whitespace-nowrap text-xl p-1">

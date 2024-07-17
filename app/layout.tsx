@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
+
+import InfoDialog from "@/components/info-dialog";
 import ThemePicker from "@/components/theme-picker";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -25,7 +27,12 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <ThemePicker />
+          <div className="fixed top-4 right-4 z-50">
+            <ThemePicker />
+          </div>
+          <div className="fixed top-4 left-4 z-50">
+            <InfoDialog />
+          </div>
           {children}
         </ThemeProvider>
       </body>
