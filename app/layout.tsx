@@ -34,6 +34,19 @@ export default function RootLayout({
             <InfoDialog />
           </div>
           {children}
+          {/* GA tag */}
+          <Script
+            src="https://www.googletagmanager.com/gtag/js?id=G-CLV0RQE5JR"
+            strategy="afterInteractive"
+          />
+          <Script id="ga-init" strategy="afterInteractive">
+            {`
+              window.dataLayer = window.dataLayer || [];
+              function gtag(){dataLayer.push(arguments);}
+              gtag('js', new Date());
+              gtag('config', 'G-CLV0RQE5JR');
+            `}
+          </Script>
         </ThemeProvider>
       </body>
     </html>
